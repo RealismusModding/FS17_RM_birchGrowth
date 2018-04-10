@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="37">
+    <author>Realismus Modding</author>
+    <contributors>reallogger</contributors>
+    <version>1.0.0.0</version>
+    <title>
+        <en>Birch growth</en>
+        <de>Birch growth</de>
+        <fr>Birch growth</fr>
+    </title>
+
+    <description>
+        <en><![CDATA[Birch growth]]></en>
+        <de><![CDATA[Birch growth]]></de>
+        <fr><![CDATA[Birch growth]]></fr>
+    </description>
+
+    <iconFilename>icon.dds</iconFilename>
+    <multiplayer supported="true"/>
+
+    <extraSourceFiles>
+        <sourceFile filename="src/registerBirchTrees.lua" />
+        <sourceFile filename="src/birchGrowthManager.lua" />
+    </extraSourceFiles>
+
+    <seasons version="2">
+        <type>mod</type>
+        <dataFolder>seasons/</dataFolder>
+    </seasons>
+
+    <storeItems>
+    </storeItems>
+</modDesc>
+
