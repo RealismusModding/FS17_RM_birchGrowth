@@ -52,16 +52,18 @@ function birchGrowthManager:plantOneTree()
     local size = g_currentMission.terrainSize
     local x = (math.random() - 0.5) * size
     local z = (math.random() - 0.5) * size
-    
+
     local dx = 5
     local dz = 5
-    
+
+    local grassArea = 0
+
     local grassId = g_currentMission.fruits[FruitUtil.FRUITTYPE_GRASS].id
     local _, grassArea , _ = getDensityParallelogram(
         grassId,
         x-dx/2, z-dz/2, dx, 0, 0, dz,
         0, g_currentMission.numFruitStateChannels)
-    
+
     local forestGrassId = getTerrainDetailByName(g_currentMission.terrainRootNode, "forestGrassDark")
     local forestGrassDensity, forestGrassArea
     if forestGrassId ~= nil and forestGrassId ~= 0 then
@@ -70,14 +72,14 @@ function birchGrowthManager:plantOneTree()
             x-dx/2, z-dz/2, dx, 0, 0, dz,
             0, 1)
     end
-    
+
     local y = getTerrainHeightAtWorldPos(g_currentMission.terrainRootNode,x,0,z)
     local densityBits = getDensityAtWorldPos(g_currentMission.terrainDetailId, x, y, z)
-    
+
     if (grassArea > 115 and densityBits == 0) or forestGrassDensity > 100 then
         local yRot = math.random() * 2*math.pi
         TreePlantUtil.plantTree(g_currentMission.plantedTrees, TreePlantUtil.TREETYPE_TREEBIRCH, x,y,z, 0,yRot,0, 0)
-        
+
         logInfo("Planted tree at: ",x,z)
     end
 end
@@ -86,7 +88,7 @@ function birchGrowthManager:bgLoadTreeNode(superFunc, treesData, treeData, x, y,
     local treeId, splitShapeFileId = superFunc(self, treesData, treeData, x, y, z, rx, ry, rz, growthStateI, splitShapeFileId)
 
     g_seasons.replaceVisual:updateTextures(treeId)
-    
+
     return treeId, splitShapeFileId
 end
 
@@ -118,41 +120,6 @@ function logInfo(...)
         str = str .. " " .. tostring(select(i, ...))
     end
     print(str)
-end
-
-function print_r(t)
-    local print_r_cache = {}
-    local function sub_print_r(t, indent)
-        if (print_r_cache[tostring(t)]) then
-            print(indent .. "*" .. tostring(t))
-        else
-            print_r_cache[tostring(t)] = true
-            if (type(t) == "table") then
-                for pos, val in pairs(t) do
-                    pos = tostring(pos)
-                    if (type(val) == "table") then
-                        print(indent .. "[" .. pos .. "] => " .. tostring(t) .. " {")
-                        sub_print_r(val, indent .. string.rep(" ", string.len(pos) + 8))
-                        print(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
-                    elseif (type(val) == "string") then
-                        print(indent .. "[" .. pos .. '] => "' .. val .. '"')
-                    else
-                        print(indent .. "[" .. pos .. "] => " .. tostring(val))
-                    end
-                end
-            else
-                print(indent .. tostring(t))
-            end
-        end
-    end
-    if (type(t) == "table") then
-        print(tostring(t) .. " {")
-        sub_print_r(t, "  ")
-        print("}")
-    else
-        sub_print_r(t, "  ")
-    end
-    print()
 end
 
 TreePlantUtil.loadTreeNode = Utils.overwrittenFunction(TreePlantUtil.loadTreeNode , birchGrowthManager.bgLoadTreeNode)
