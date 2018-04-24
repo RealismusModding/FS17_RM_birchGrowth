@@ -65,7 +65,8 @@ function birchGrowthManager:plantOneTree()
         0, g_currentMission.numFruitStateChannels)
 
     local forestGrassId = getTerrainDetailByName(g_currentMission.terrainRootNode, "forestGrassDark")
-    local forestGrassDensity, forestGrassArea
+    local forestGrassDensity = 0
+    local forestGrassArea = 0
     if forestGrassId ~= nil and forestGrassId ~= 0 then
         forestGrassDensity, forestGrassArea , _ = getDensityParallelogram(
             forestGrassId,
@@ -79,8 +80,6 @@ function birchGrowthManager:plantOneTree()
     if (grassArea > 115 and densityBits == 0) or forestGrassDensity > 100 then
         local yRot = math.random() * 2*math.pi
         TreePlantUtil.plantTree(g_currentMission.plantedTrees, TreePlantUtil.TREETYPE_TREEBIRCH, x,y,z, 0,yRot,0, 0)
-
-        logInfo("Planted tree at: ",x,z)
     end
 end
 
@@ -105,21 +104,6 @@ function birchGrowthManager:mouseEvent(posX, posY, isDown, isUp, button)
 end
 
 function birchGrowthManager:draw()
---local x, y, z = localToWorld(g_currentMission.player.cameraNode, 0, 0, 0.5)
---renderText(0.44, 0.78, 0.01, "player at: " .. tostring(x) .. "," .. tostring(z))
-
---local id = getTerrainDetailByName(g_currentMission.terrainRootNode, "forestGrassDark")
---id = getChild(g_currentMission.terrainRootNode, "forestGrassDark")
---local densityBits = getDensityAtWorldPos(g_currentMission.terrainDetailId, x, y, z)
---renderText(0.44, 0.76, 0.01, "area: " .. tostring(densityBits))
-end
-
-function logInfo(...)
-    local str = "[Birch Weed]"
-    for i = 1, select("#", ...) do
-        str = str .. " " .. tostring(select(i, ...))
-    end
-    print(str)
 end
 
 TreePlantUtil.loadTreeNode = Utils.overwrittenFunction(TreePlantUtil.loadTreeNode , birchGrowthManager.bgLoadTreeNode)
